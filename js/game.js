@@ -34,7 +34,7 @@ function newGame() {
     }
   }
   state = { columns, stock: deck, completed: 0, moves: 0, score: 500, suits };
-  history = []; selected = null; hintMove = null; seconds = 0; started = false;
+  history = []; selected = null; hintMove = null; seconds = 0; started = true;
   $("timer").textContent = "00:00"; startTimer(); render();
   setStatus("Selecciona una secuencia y después una columna de destino.");
 }
@@ -169,7 +169,14 @@ function checkWin() {
   }
 }
 
-attachCardInteractions(boardEl, { select: selectCard, drop: dropOn });
+attachCardInteractions(boardEl, {
+  select: selectCard,
+  drop: dropOn,
+  move: (from, index, to) => {
+    selected = { from, index };
+    dropOn(to);
+  }
+});
 $("new-game").addEventListener("click", newGame);
 $("play-again").addEventListener("click", () => { $("win-dialog").close(); newGame(); });
 $("restart").addEventListener("click", restartGame);
