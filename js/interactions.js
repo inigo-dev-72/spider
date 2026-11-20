@@ -193,8 +193,8 @@ export function attachCardInteractions(board, handlers) {
       dragGhost = null;
     }
 
-    board.querySelectorAll(".column.drop-target")
-      .forEach(el => el.classList.remove("drop-target"));
+    board.querySelectorAll(".touch-drag-source")
+      .forEach(card => card.classList.remove("touch-drag-source"));
 
     touchState = null;
     preventNextClick();
@@ -278,6 +278,14 @@ export function attachCardInteractions(board, handlers) {
 
     if (!touchState.dragging && touchState.canDrag && distance > 8) {
       touchState.dragging = true;
+
+      const column = touchState.cardEl.closest(".column");
+      const cards = [...column.querySelectorAll(".card.face-up")];
+
+      cards
+        .filter(card => Number(card.dataset.index) >= touchState.index)
+        .forEach(card => card.classList.add("touch-drag-source"));
+
       dragGhost = createTouchGhost(
         touchState.cardEl,
         touchState.index
