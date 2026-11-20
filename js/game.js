@@ -34,7 +34,7 @@ function newGame() {
     }
   }
   state = { columns, stock: deck, completed: 0, moves: 0, score: 500, suits };
-  history = []; selected = null; hintMove = null; seconds = 0; started = true;
+  history = []; selected = null; hintMove = null; seconds = 0; started = false;
   $("timer").textContent = "00:00"; startTimer(); render();
   setStatus("Selecciona una secuencia y después una columna de destino.");
 }
