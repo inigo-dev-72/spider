@@ -34,12 +34,16 @@ export function isSoundEnabled() {
 
 export function updateSoundButton() {
   const button = document.getElementById("sound-toggle");
-  const label = document.getElementById("sound-label");
 
-  if (button) {
-    button.setAttribute("aria-pressed", String(enabled));
-    button.title = enabled ? "Desactivar sonido" : "Activar sonido";
-  }
+  if (!button) return;
+
+  const label = button.querySelector("b") ||
+                document.getElementById("sound-label");
+
+  button.setAttribute("aria-pressed", String(enabled));
+  button.title = enabled
+    ? "Desactivar sonido"
+    : "Activar sonido";
 
   if (label) {
     label.textContent = enabled ? "Sonido ON" : "Sonido OFF";
