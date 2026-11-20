@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#123b32">
   <title>Spider Solitaire</title>
+  <link rel="icon" type="image/png" href="./icons/icon-192.png">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#123d2b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Spider Solitaire">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -12,7 +18,7 @@
     <header class="topbar">
       <a class="brand" href="./" aria-label="Spider Solitaire inicio">
         <span class="brand-mark">S</span>
-        <span>spider<span class="brand-light">solitaire</span></span>
+        <span>Spider<span class="brand-light">Solitaire</span></span>
       </a>
       <div class="top-actions">
         <label class="difficulty-control">
@@ -71,5 +77,15 @@
   </dialog>
 
   <script type="module" src="js/game.js"></script>
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js")
+          .then(() => console.log("Aplicación preparada para uso offline"))
+          .catch(error => console.error("Error al registrar:", error));
+      });
+    }
+  </script>
 </body>
 </html>
