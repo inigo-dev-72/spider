@@ -283,7 +283,7 @@ export function attachCardInteractions(board, handlers) {
       const cards = [...column.querySelectorAll(".card.face-up")];
 
       cards
-        .filter(card => Number(card.dataset.index) >= touchState.index)
+        .filter(card => Number(card.dataset.index) > touchState.index)
         .forEach(card => card.classList.add("touch-drag-source"));
 
       dragGhost = createTouchGhost(
