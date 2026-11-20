@@ -112,3 +112,11 @@ select option { background:#173e34; }
   .tool-button b { font-size:9px; }
   .tool-button { padding:7px 5px; }
 }
+
+#completed {
+  transition: transform 0.25s ease;
+}
+
+#completed.pulse {
+  transform: scale(1.25);
+}
