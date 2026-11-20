@@ -103,7 +103,9 @@ function dropOn(to) {
   const { from, index } = selected;
   if (from === to) { selected = null; render(); return; }
   const source = state.columns[from], destination = state.columns[to], moving = source.slice(index);
+
   if (!isValidDestination(moving[0], destination)) {
+    playSound("invalid");
     setStatus("Movimiento no válido. Coloca la carta sobre otra de valor inmediatamente superior.");
     return;
   }
@@ -116,6 +118,7 @@ function dropOn(to) {
   removeCompleted(to);
   render(); started = true;
   setStatus("Movimiento realizado.");
+  playSound("move");
   checkWin();
 }
 function revealTop(columnIndex) {
@@ -137,6 +140,7 @@ function dealStock() {
   if (!state.stock.length) return;
   if (state.columns.some(column => column.length === 0)) {
     setStatus("Ocupa primero todas las columnas vacías antes de repartir.");
+    playSound("invalid");
     return;
   }
   saveHistory();
@@ -147,12 +151,14 @@ function dealStock() {
   }
   state.moves++; state.score = Math.max(0, state.score - 1);
   started = true; selected = null; hintMove = null; render(); checkWin();
+  playSound("deal");
   setStatus("Nueva fila repartida.");
 }
 function undo() {
   if (!history.length) return;
   const previous = history.pop(); restoreSnapshot(previous);
   $("undo").disabled = history.length === 0;
+  playSound("undo");
   setStatus("Se ha deshecho el último movimiento.");
 }
 function showHint() {
