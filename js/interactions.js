@@ -2,13 +2,17 @@
 export function attachCardInteractions(board, handlers) {
   let dragPayload = null;
   let suppressClick = false;
+  let touchSelection = null;
 
-  // Selección mediante clic
+  // INTERACCIÓN CON RATÓN: clic
   board.addEventListener("click", event => {
     if (suppressClick) {
       suppressClick = false;
       return;
     }
+
+    // Los dispositivos táctiles se gestionan con pointerdown
+    if (event.pointerType === "touch") return;
 
     const cardEl = event.target.closest(".card.face-up");
     const columnEl = event.target.closest(".column");
@@ -23,7 +27,46 @@ export function attachCardInteractions(board, handlers) {
     }
   });
 
-  // Inicio del arrastre
+  // INTERACCIÓN TÁCTIL: tocar y tocar
+  board.addEventListener("pointerdown", event => {
+    if (event.pointerType !== "touch") return;
+
+    event.preventDefault();
+
+    const cardEl = event.target.closest(".card.face-up");
+    const columnEl = event.target.closest(".column");
+
+    if (cardEl) {
+      const from = Number(cardEl.dataset.column);
+      const index = Number(cardEl.dataset.index);
+
+      if (!touchSelection) {
+        // Primer toque: seleccionar secuencia
+        touchSelection = { from, index };
+        handlers.select(from, index);
+      } else if (touchSelection.from === from) {
+        // Otro toque en la misma columna: cambiar selección
+        touchSelection = { from, index };
+        handlers.select(from, index);
+      } else {
+        // Segundo toque en otra columna: colocar secuencia
+        const to = from;
+        touchSelection = null;
+        handlers.drop(to);
+      }
+
+    } else if (columnEl) {
+      const to = Number(columnEl.dataset.column);
+
+      if (touchSelection) {
+        // Colocar en una columna vacía
+        touchSelection = null;
+        handlers.drop(to);
+      }
+    }
+  });
+
+  // ARRASTRE NATIVO PARA ORDENADOR
   board.addEventListener("dragstart", event => {
     const cardEl = event.target.closest(".card.face-up");
 
@@ -37,10 +80,8 @@ export function attachCardInteractions(board, handlers) {
       index: Number(cardEl.dataset.index)
     };
 
-    // Crear una representación visual de toda la secuencia
     const column = cardEl.closest(".column");
     const cards = [...column.querySelectorAll(".card.face-up")];
-
     const index = Number(cardEl.dataset.index);
 
     const sequence = cards.filter(card =>
@@ -70,11 +111,7 @@ export function attachCardInteractions(board, handlers) {
 
     document.body.appendChild(dragImage);
 
-    event.dataTransfer.setDragImage(
-      dragImage,
-      15,
-      15
-    );
+    event.dataTransfer.setDragImage(dragImage, 15, 15);
 
     setTimeout(() => dragImage.remove(), 0);
 
@@ -84,11 +121,8 @@ export function attachCardInteractions(board, handlers) {
     );
 
     event.dataTransfer.effectAllowed = "move";
-
-    // No redibujar el tablero durante el arrastre.
   });
 
-  // Final del arrastre
   board.addEventListener("dragend", () => {
     if (dragPayload) suppressClick = true;
 
@@ -98,7 +132,6 @@ export function attachCardInteractions(board, handlers) {
       .forEach(el => el.classList.remove("drop-target"));
   });
 
-  // Permitir soltar sobre una columna
   board.addEventListener("dragover", event => {
     const columnEl = event.target.closest(".column");
 
@@ -113,7 +146,6 @@ export function attachCardInteractions(board, handlers) {
     columnEl.classList.add("drop-target");
   });
 
-  // Quitar resaltado al salir de una columna
   board.addEventListener("dragleave", event => {
     const columnEl = event.target.closest(".column");
 
@@ -122,7 +154,6 @@ export function attachCardInteractions(board, handlers) {
     }
   });
 
-  // Soltar la carta
   board.addEventListener("drop", event => {
     const columnEl = event.target.closest(".column");
 
