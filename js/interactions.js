@@ -37,6 +37,47 @@ export function attachCardInteractions(board, handlers) {
       index: Number(cardEl.dataset.index)
     };
 
+    // Crear una representación visual de toda la secuencia
+    const column = cardEl.closest(".column");
+    const cards = [...column.querySelectorAll(".card.face-up")];
+
+    const index = Number(cardEl.dataset.index);
+
+    const sequence = cards.filter(card =>
+      Number(card.dataset.index) >= index
+    );
+
+    const dragImage = document.createElement("div");
+
+    dragImage.style.position = "absolute";
+    dragImage.style.top = "-1000px";
+    dragImage.style.left = "-1000px";
+    dragImage.style.width = `${cardEl.offsetWidth}px`;
+    dragImage.style.height =
+      `${sequence.length * 25 + cardEl.offsetHeight}px`;
+
+    sequence.forEach((card, i) => {
+      const clone = card.cloneNode(true);
+
+      clone.style.position = "absolute";
+      clone.style.left = "0";
+      clone.style.top = `${i * 25}px`;
+      clone.style.width = "100%";
+      clone.style.height = `${card.offsetHeight}px`;
+
+      dragImage.appendChild(clone);
+    });
+
+    document.body.appendChild(dragImage);
+
+    event.dataTransfer.setDragImage(
+      dragImage,
+      15,
+      15
+    );
+
+    setTimeout(() => dragImage.remove(), 0);
+
     event.dataTransfer.setData(
       "text/plain",
       JSON.stringify(dragPayload)
