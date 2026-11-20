@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#123b32">
+  <title>Spider Solitaire</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="Spider Solitaire inicio">
+        <span class="brand-mark">S</span>
+        <span>spider<span class="brand-light">solitaire</span></span>
+      </a>
+      <div class="top-actions">
+        <label class="difficulty-control">
+          <span>Dificultad</span>
+          <select id="difficulty" aria-label="Dificultad">
+            <option value="1">1 palo</option>
+            <option value="2">2 palos</option>
+            <option value="4">4 palos</option>
+          </select>
+        </label>
+        <button class="button button-primary" id="new-game">Nueva partida</button>
+      </div>
+    </header>
+
+    <section class="stats" aria-label="Estadísticas de partida">
+      <div class="stat"><span class="stat-label">Tiempo</span><strong id="timer">00:00</strong></div>
+      <div class="stat"><span class="stat-label">Movimientos</span><strong id="moves">0</strong></div>
+      <div class="stat"><span class="stat-label">Puntuación</span><strong id="score">500</strong></div>
+      <div class="stat stat-progress"><span class="stat-label">Secuencias</span><strong id="completed">0 <small>/ 8</small></strong></div>
+    </section>
+
+    <nav class="toolbar" aria-label="Controles del juego">
+      <button class="tool-button" id="undo" title="Deshacer último movimiento" disabled><span>↶</span><b>Deshacer</b></button>
+      <button class="tool-button" id="hint" title="Mostrar un movimiento posible"><span>✧</span><b>Pista</b></button>
+      <button class="tool-button" id="restart" title="Reiniciar esta partida"><span>⟲</span><b>Reiniciar</b></button>
+      <div class="toolbar-spacer"></div>
+      <div class="stock-area">
+        <span class="stock-label">Mazo</span>
+        <button id="stock" class="stock-pile" aria-label="Repartir cartas"><span class="card-back-pattern"></span><span id="stock-count">5</span></button>
+      </div>
+    </nav>
+
+    <section id="board" class="board" aria-label="Tablero de Spider Solitaire">
+      <div class="empty-state">Preparando partida…</div>
+    </section>
+
+    <footer class="game-footer">
+      <span id="status" role="status">Selecciona una secuencia y después una columna de destino.</span>
+      <span class="footer-tip">Consejo: también puedes arrastrar las cartas.</span>
+    </footer>
+  </main>
+
+  <dialog id="win-dialog" class="modal">
+    <div class="modal-content">
+      <div class="win-icon">✦</div>
+      <p class="eyebrow">PARTIDA COMPLETADA</p>
+      <h1>¡Enhorabuena!</h1>
+      <p>Has completado las ocho secuencias.</p>
+      <div class="modal-stats"><span>Tiempo <b id="final-time">00:00</b></span><span>Puntuación <b id="final-score">500</b></span></div>
+      <button class="button button-primary" id="play-again">Nueva partida</button>
+    </div>
+  </dialog>
+
+  <script type="module" src="js/game.js"></script>
+</body>
+</html>
