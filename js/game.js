@@ -1,6 +1,7 @@
 import { createDeck, rankLabel } from "./deck.js";
 import { canMoveRun, isValidDestination, findCompleteRun, getLegalMoves } from "./board.js";
 import { attachCardInteractions } from "./interactions.js";
+import { playSound, toggleSound, updateSoundButton } from "./sounds.js";
 
 const $ = id => document.getElementById(id);
 const boardEl = $("board");
@@ -91,7 +92,11 @@ function selectCard(from, index) {
   if (selected && selected.from === from && selected.index === index) selected = null;
   else selected = { from, index };
   hintMove = null; render();
-  if (selected) setStatus("Ahora selecciona la columna donde quieres colocar la secuencia.");
+
+  if (selected) {
+    setStatus("Ahora selecciona la columna donde quieres colocar la secuencia.");
+    playSound("select");
+  }
 }
 function dropOn(to) {
   if (!selected) return;
@@ -184,5 +189,8 @@ $("undo").addEventListener("click", undo);
 $("hint").addEventListener("click", showHint);
 $("stock").addEventListener("click", dealStock);
 $("difficulty").addEventListener("change", newGame);
+$("sound-toggle").addEventListener("click", toggleSound);
+updateSoundButton();
+
 window.addEventListener("resize", () => { if (state) render(); });
 newGame();
