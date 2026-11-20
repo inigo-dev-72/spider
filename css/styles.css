@@ -120,3 +120,22 @@ select option { background:#173e34; }
 #completed.pulse {
   transform: scale(1.25);
 }
+
+/* Mejorar interacción táctil en iPad y móviles */
+#board {
+  touch-action: pan-y;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.card {
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.column {
+  touch-action: pan-y;
+}
