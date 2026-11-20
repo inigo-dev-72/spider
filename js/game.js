@@ -125,17 +125,70 @@ function revealTop(columnIndex) {
   const column = state.columns[columnIndex];
   if (column.length && !column[column.length - 1].faceUp) column[column.length - 1].faceUp = true;
 }
+
+function animateCompletedRun(columnIndex) {
+  const column = boardEl.querySelectorAll(".column")[columnIndex];
+  const cards = column?.querySelectorAll(".card.face-up");
+
+  if (!cards?.length) return;
+
+  const firstCard = cards[cards.length - 1];
+  const counter = $("completed");
+
+  const start = firstCard.getBoundingClientRect();
+  const end = counter.getBoundingClientRect();
+
+  const flyingCard = firstCard.cloneNode(true);
+
+  flyingCard.style.position = "fixed";
+  flyingCard.style.left = `${start.left}px`;
+  flyingCard.style.top = `${start.top}px`;
+  flyingCard.style.width = `${start.width}px`;
+  flyingCard.style.height = `${start.height}px`;
+  flyingCard.style.margin = "0";
+  flyingCard.style.zIndex = "9999";
+  flyingCard.style.pointerEvents = "none";
+  flyingCard.style.transition =
+    "left 650ms ease-in, top 650ms ease-in, transform 650ms ease-in, opacity 650ms ease-in";
+
+  document.body.appendChild(flyingCard);
+
+  requestAnimationFrame(() => {
+    flyingCard.style.left = `${end.left + end.width / 2 - start.width / 2}px`;
+    flyingCard.style.top = `${end.top + end.height / 2 - start.height / 2}px`;
+    flyingCard.style.transform = "scale(0.25) rotate(15deg)";
+    flyingCard.style.opacity = "0.3";
+  });
+
+  setTimeout(() => flyingCard.remove(), 700);
+}
+
 function removeCompleted(columnIndex) {
   let changed = true;
+
   while (changed) {
     changed = false;
     const column = state.columns[columnIndex];
+
     if (findCompleteRun(column)) {
-      column.splice(-13, 13); state.completed++; state.score += 100; changed = true;
+      animateCompletedRun(columnIndex);
+
+      column.splice(-13, 13);
+      state.completed++;
+
+      $("completed").classList.remove("pulse");
+      void $("completed").offsetWidth;
+      $("completed").classList.add("pulse");
+      
+      state.score += 100;
+      changed = true;
+
       revealTop(columnIndex);
+      playSound("complete");
     }
   }
 }
+
 function dealStock() {
   if (!state.stock.length) return;
   if (state.columns.some(column => column.length === 0)) {
@@ -188,9 +241,21 @@ attachCardInteractions(boardEl, {
     dropOn(to);
   }
 });
-$("new-game").addEventListener("click", newGame);
+
+$("new-game").addEventListener("click", () => {
+  if (confirm("¿Quieres empezar una partida nueva? Se perderá la partida actual.")) {
+    newGame();
+  }
+});
+
 $("play-again").addEventListener("click", () => { $("win-dialog").close(); newGame(); });
-$("restart").addEventListener("click", restartGame);
+
+$("restart").addEventListener("click", () => {
+  if (confirm("¿Quieres reiniciar la partida actual? Perderás el progreso conseguido.")) {
+    restartGame();
+  }
+});
+
 $("undo").addEventListener("click", undo);
 $("hint").addEventListener("click", showHint);
 $("stock").addEventListener("click", dealStock);
