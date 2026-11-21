@@ -33,27 +33,43 @@
       </div>
     </header>
 
-    <section class="stats" aria-label="Estadísticas de partida">
-      <div class="stat"><span class="stat-label">Tiempo</span><strong id="timer">00:00</strong></div>
-      <div class="stat"><span class="stat-label">Movimientos</span><strong id="moves">0</strong></div>
-      <div class="stat"><span class="stat-label">Puntuación</span><strong id="score">500</strong></div>
-      <div class="stat stat-progress"><span class="stat-label">Secuencias</span><strong id="completed">0 <small>/ 8</small></strong></div>
-    </section>
+    
+<div class="game-controls">
+  <section class="stats" aria-label="Estadísticas de partida">
+    <div class="stat">
+      <span class="stat-label">Tiempo</span>
+      <strong id="timer">00:00</strong>
+    </div>
+    <div class="stat">
+      <span class="stat-label">Movimientos</span>
+      <strong id="moves">0</strong>
+    </div>
+    <div class="stat">
+      <span class="stat-label">Puntuación</span>
+      <strong id="score">500</strong>
+    </div>
+    <div class="stat stat-progress">
+      <span class="stat-label">Secuencias</span>
+      <strong id="completed">0 <small>/ 8</small></strong>
+    </div>
+  </section>
 
-    <nav class="toolbar" aria-label="Controles del juego">
-      <button class="tool-button" id="undo" title="Deshacer último movimiento" disabled><span>↶</span><b>Deshacer</b></button>
-      <button class="tool-button" id="hint" title="Mostrar un movimiento posible"><span>✧</span><b>Pista</b></button>
-      <button class="tool-button" id="restart" title="Reiniciar esta partida"><span>⟲</span><b>Reiniciar</b></button>
-      <button class="tool-button" id="sound-toggle" title="Activar o desactivar sonido">
-        <span id="sound-icon">♫</span>
-        <b>Sonido ON</b>
-      </button>
-      <div class="toolbar-spacer"></div>
-      <div class="stock-area">
-        <span class="stock-label">Mazo</span>
-        <button id="stock" class="stock-pile" aria-label="Repartir cartas"><span class="card-back-pattern"></span><span id="stock-count">5</span></button>
-      </div>
-    </nav>
+  <nav class="toolbar" aria-label="Controles del juego">
+    <button class="tool-button" id="undo" title="Deshacer último movimiento" disabled><span>↶</span><b>Deshacer</b></button>
+    <button class="tool-button" id="hint" title="Mostrar un movimiento posible"><span>✧</span><b>Pista</b></button>
+    <button class="tool-button" id="restart" title="Reiniciar esta partida"><span>⟲</span><b>Reiniciar</b></button>
+    <button class="tool-button" id="sound-toggle" title="Activar o desactivar sonido">
+      <span id="sound-icon">♫</span>
+      <b>Sonido ON</b>
+    </button>
+    <div class="toolbar-spacer"></div>
+    <div class="stock-area">
+      <span class="stock-label">Mazo</span>
+      <button id="stock" class="stock-pile" aria-label="Repartir cartas"><span class="card-back-pattern"></span><span id="stock-count">5</span></button>
+    </div>
+  </nav>
+</div>
+
 
     <section id="board" class="board" aria-label="Tablero de Spider Solitaire">
       <div class="empty-state">Preparando partida…</div>
